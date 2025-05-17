@@ -1,26 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { CusotmerserviceService } from '../services/cusotmerservice.service';
-import {NgForOf} from '@angular/common';
+import {AsyncPipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
+import {catchError, Observable, of, throwError} from 'rxjs';
+import {customer} from '../model/customer.model';
+import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
   imports: [
-    NgForOf
+    NgForOf,
+    AsyncPipe,
+    NgIf,
+    ReactiveFormsModule,
+    JsonPipe
   ],
   styleUrls: ['./customers.component.css']  // Correction ici : c'est styleUrls (au pluriel)
 })
 export class CustomersComponent implements OnInit {
 
-  customers: any;  // renommé customer → customers, car on récupère une liste
+  customers$!: Observable<customer[] | null>;
+  errormes! : string
+  searchformGroup! : FormGroup
 
-  constructor(private customerservice: CusotmerserviceService) { }
+  constructor(private customerservice: CusotmerserviceService,private  fb : FormBuilder) { }
 
   ngOnInit() {
-    this.getAllCustomers();  // pour appeler au chargement
+    this.searchformGroup = this.fb.group(
+      {
+        search:this.fb.control("")
+      }
+    )
+    this.handelsearchcustomer();  // pour appeler au chargement
   }
 
-  getAllCustomers() {
+ /* getAllCustomers() {
     this.customerservice.getAllCustomers().subscribe({
       next: (resp) => {
         this.customers = resp;
@@ -29,6 +43,29 @@ export class CustomersComponent implements OnInit {
         console.error('Erreur lors de la récupération des clients', err);
       }
     });
+  }*/
+
+  handelsearchcustomer(){
+    let keyword = this.searchformGroup?.value.search
+    this.customers$=this.customerservice.getAllCustomersByName(keyword).pipe(
+      catchError(err => {
+        console.error('Erreur lors du chargement des clients :', err);
+        this.errormes = err.message
+        return of(null);
+      })
+    )
+
+  }
+
+  getAllCustomers() {
+
+    this.customers$ = this.customerservice.getAllCustomers().pipe(
+      catchError(err => {
+        console.error('Erreur lors du chargement des clients :', err);
+        this.errormes = err.message
+        return of(null);
+      })
+    );
   }
 
   protected readonly NgForOf = NgForOf;

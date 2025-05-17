@@ -1,19 +1,51 @@
 <div class="container mt-4">
-  <h2>Liste des Clients</h2>
-  <table class="table table-striped table-bordered">
-    <thead class="table-dark">
-    <tr>
-      <th>ID</th>
-      <th>Nom</th>
-      <th>Email</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let customer of customers">
-      <td>{{ customer.id }}</td>
-      <td>{{ customer.name }}</td>
-      <td>{{ customer.email }}</td>
-    </tr>
-    </tbody>
-  </table>
+
+  <!-- Si la data est chargée -->
+  <ng-container *ngIf="customers$ | async as listcustomers; else loadingOrError">
+
+    <h2>Liste des Clients</h2>
+
+    <div *ngIf="searchformGroup">
+      {{this.searchformGroup.value | json}}
+      <form [formGroup]="searchformGroup" (ngSubmit)="handelsearchcustomer()">
+
+        <div class="input-group">
+          <label class="input-group-text">keyword</label>
+          <input type="text" formControlName="search" class="form-control">
+          <button class=" btn btn-info"> <i class="bi bi-search"></i></button>
+        </div>
+
+      </form>
+    </div>
+
+    <table class="mt-4 table table-striped table-bordered">
+      <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Email</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let customer of listcustomers">
+        <td>{{ customer.id }}</td>
+        <td>{{ customer.name }}</td>
+        <td>{{ customer.email }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </ng-container>
+
+  <!-- Template loading ou erreur -->
+  <ng-template #loadingOrError>
+    <div *ngIf="errormes; else loading" class="text-danger">
+      {{ errormes }}
+    </div>
+  </ng-template>
+
+  <!-- Template loading -->
+  <ng-template #loading>
+    <div>Loading ...</div>
+  </ng-template>
+
 </div>
