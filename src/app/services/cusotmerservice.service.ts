@@ -24,5 +24,9 @@ export class CusotmerserviceService {
     return this.http.post<customer>(environment.apiUrl+"/customers",cs)
   }
 
+  deletecustomer(id:number){
+    return this.http.delete(environment.apiUrl+"/customers/"+id)
+  }
+
 }
 

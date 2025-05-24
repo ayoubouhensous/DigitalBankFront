@@ -67,6 +67,14 @@ export class CustomersComponent implements OnInit {
       })
     );
   }
+  handleDeletCustomer(id:number){
+    this.customerservice.deletecustomer(id).subscribe(
+      {
+        next : (resp) =>{this.handelsearchcustomer()},
+        error : err => console.log(err)
+      }
+    )
+  }
 
   protected readonly NgForOf = NgForOf;
 }
