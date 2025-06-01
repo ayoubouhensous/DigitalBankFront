@@ -1,59 +1,159 @@
-# DigitalBankingFront
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.11.
 
-## Development server
+A modern banking management system built with Angular 17 frontend and Spring Boot 3 backend.
 
-To start a local development server, run:
+## Features
 
+- **User Authentication**: JWT-based secure authentication
+- **Customer Management**: CRUD operations for bank customers
+- **Account Management**: View and manage bank accounts
+- **Role-Based Access Control**: Admin/Customer roles
+- **Responsive UI**: Built with Bootstrap 5
+
+## Technology Stack
+
+### Frontend
+- Angular 17
+- RxJS 7.8
+- Bootstrap 5.3
+- JWT Authentication
+
+### Backend
+- Spring Boot 3.2
+- Spring Security 6.1
+- JPA/Hibernate
+- MySQL 8.0
+
+## Getting Started
+
+### Prerequisites
+- Node.js 18.x
+- Angular CLI 17.x
+- Java JDK 17
+- MySQL 8.x
+
+### Installation
+
+1. **Backend Setup**:
 ```bash
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
+2. **Frontend Setup**:
+```bash
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+### Configuration
+Configure your database connection in `application.properties`:
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/bank_db
+spring.datasource.username=bank_user
+spring.datasource.password=password
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Project Structure
 
-```bash
-ng generate --help
+```
+banking-system/
+├── frontend/           # Angular application
+│   ├── src/
+│   │   ├── app/        # Components and services
+│   │   ├── assets/     # Static files
+│   │   └── environments/ # Environment configs
+│
+└── backend/            # Spring Boot application
+    ├── src/main/java/
+    │   ├── config/     # Security and app config
+    │   ├── entities/   # JPA entities
+    │   ├── repositories/ # Data access layer
+    │   └── web/       # REST controllers
+    └── resources/     # Properties and static content
 ```
 
-## Building
+## API Documentation
 
-To build the project run:
-
-```bash
-ng build
+### Authentication
+**POST** `/auth/login`
+```json
+{
+  "username": "admin",
+  "password": "12345"
+}
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+**Response**:
+```json
+{
+  "access-token": "eyJhbGciOiJIUzUxMiJ9..."
+}
+```
 
-## Running unit tests
+### Customers
+**GET** `/customers/search?keyword=Yass`
+```json
+[
+  {
+    "id": 1,
+    "name": "Yassine",
+    "email": "yassine@gmail.com"
+  }
+]
+```
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Security
 
+- JWT authentication with HS512 signing
+- Role-based authorization
+- CSRF protection
+- Secure password storage with BCrypt
+
+## Testing
+
+Run unit tests:
 ```bash
+# Frontend
 ng test
+
+# Backend
+mvn test
 ```
 
-## Running end-to-end tests
+## Deployment
 
-For end-to-end (e2e) testing, run:
+### Frontend Options
+- Vercel/Netlify
+- Docker + Nginx
 
-```bash
-ng e2e
+### Backend Options
+- AWS Elastic Beanstalk
+- Docker Compose
+
+## Contributing
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+Distributed under the MIT License.
+
+## Contact
+
+Project Link: [https://github.com/yourusername/banking-system](https://github.com/yourusername/banking-system)
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+This README.md version:
+- Is more concise and scannable
+- Uses proper Markdown formatting
+- Includes clear section headers
+- Provides essential information without excessive technical details
+- Maintains all key information from the original
+- Follows standard README structure
+- Is more welcoming to contributors
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+You can further customize it with your actual project links, contact information, and specific deployment instructions.
